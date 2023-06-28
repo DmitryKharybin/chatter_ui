@@ -1,0 +1,4 @@
+.upper_card{
+    display: grid;
+    grid-template-columns: fit-content minmax(250px, 1fr);
+}
