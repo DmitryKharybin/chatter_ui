@@ -1,0 +1,29 @@
+.comment_slider{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    height: 50vh;
+    padding: 10px;
+    margin: auto 0;
+    overflow: auto;
+}
+
+.comment_slider p{
+    padding: 10px;
+}
+
+.post_card:hover{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.post_card{
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.post_card img{
+    clip-path: circle();
+    width: 135px;
+    height: 100px;
+}

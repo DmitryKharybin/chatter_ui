@@ -1,8 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
 import './NavBar.css';
+import SearchBar from "../SearchBar/SearchBar";
 
 export default function NavBar() {
-
 
 
     return (
@@ -11,6 +11,7 @@ export default function NavBar() {
 
             <Link to={'/'}  className="navbar_logo">Chatter</Link>
 
+            <SearchBar></SearchBar>    
 
             <ul>
                 <li><NavLink to={'/profile'} className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Profile</NavLink></li>

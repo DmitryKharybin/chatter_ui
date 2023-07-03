@@ -1,41 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
+import useHttpPostMutation from "../../hooks/useHttpPostMutation";
+import { useNavigate } from "react-router-dom";
+import Form from '../Form/Form'
 
-export default function LoginPage({onLogin}) {
+export default function LoginPage() {
+
+    const API = import.meta.env.VITE_BACKEND_CHATTER_API;
+    const USER_ENDPOINT = import.meta.env.VITE_BACKEND_USER_ENDPOINT;
+    const navigate = useNavigate();
+
+    const{mutate, isSuccess, isError, data, isLoading} = useHttpPostMutation()
+    
+    const userEndPoint = `${API}/${USER_ENDPOINT}/Login`
 
 
-    const [loginCredentials,setLoginCredentials] = useState({username: '', password: ''})
-
-    //send login credentials back to App component via props(onLogin), 
-    // Then reset the loginCredentials state , so then the form will appear empty again
-    function onSubmitHandler(e){
-        e.preventDefault();
-        onLogin(loginCredentials)
-        setLoginCredentials({username:'',password:''})
-
+    function onSubmitHandler(data){
+        mutate({endPoint: userEndPoint, body: data})
     }
-
-
-    function onInputChange(input){
-
-        setLoginCredentials(credentials => {
-            return {...credentials, [input.target.name]: input.target.value}
-        })
-
+   
+  
+    useEffect(() => {
+        if (isSuccess) {
+          localStorage.setItem("Key", data.data);
+          navigate("/profile");
+        }
+      }, [isSuccess, data]);
+  
+   
+    if(isError){
+      return(
+        <div>
+          <h1>Something went wrong</h1>
+        </div>
+  
+      )
+    }
+  
+    if(isLoading){
+      return(
+        <div>
+          <h1>Loading...</h1>
+        </div>
+      )
     }
 
 
     return (
-        <>
+        <div>
             <h2>Login Page</h2>
-        <form onSubmit={onSubmitHandler}>
-
-            <div>
-                <input type="text" name="username" placeholder="User Name" value={loginCredentials.username} required onChange={(e) => onInputChange(e)}/>
-                <input type="password" name="password" placeholder="Password" value={loginCredentials.password} required onChange={(e) => onInputChange(e)}/>
-            </div>
-
-            <button>Login</button>
-        </form>
-        </>
+        <Form submitHandler={onSubmitHandler}></Form>
+        </div>
     )
 }

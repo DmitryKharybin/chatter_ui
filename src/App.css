@@ -2,12 +2,16 @@ body{
     box-sizing: border-box;
     margin: 0;
     font-family: 'Ubuntu', sans-serif;
+    background-color: rgb(17, 17, 85);
+    color: white;
 }
 
 .container{
+    display: flex;
     padding: 1rem;
-    text-align: center;
-    height: 90vh;
+    justify-content: center;
+    align-items: start;
+    height: 80vh;
 }
 
 #footer{

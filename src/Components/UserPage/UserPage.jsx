@@ -1,23 +1,48 @@
-import { useState } from "react";
 import UpperCard from "./UpperCard";
-import UserService from '/src/Services/UserService'
+import useHttpGet from "../../hooks/useHttpGet";
+import Feed from "./Feed";
 
 export default function UserPage() {
 
-    const [user, setUser] = useState({ name: 'John', gender: 'Male', image: './Images/DefaultAvatar.png' })
 
-    const userService = new UserService();
+    const API = import.meta.env.VITE_BACKEND_CHATTER_API;
+    const DATA_ENDPOINT = import.meta.env.VITE_BACKEND_DATA_ENDPOINT;
 
-    function getUserData(){
-        const token = localStorage.getItem('Key')
-        userService.getUserData(token)
-        .then(response => console.log(response.data))
+    const endpoint = `${API}/${DATA_ENDPOINT}/GetMyUserData`;
 
+    const key = localStorage.getItem('Key');
+
+    const { isLoading, data, isError, error } = useHttpGet(endpoint, { Authorization: key })
+
+
+
+    if (isLoading) {
+        return (
+            <h1>Loading...</h1>
+        )
     }
 
-    return (
-        <>
-            <UpperCard user={user} />
-        </>
-    )
+
+    if (isError) {
+
+
+        return (
+            <h1>Something went wrong </h1>
+        )
+    }
+
+
+    if (data) {
+        const user = data.data
+        return (
+            <div className="vartical_flex_container">
+
+                <UpperCard user={{ image: user?.image, name: user?.name, friends: user?.friends }} />
+
+                <Feed posts={user.posts} />
+            </div>
+        )
+    }
+
+
 }
