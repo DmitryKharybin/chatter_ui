@@ -12,6 +12,7 @@
 }
 
 
+
 .user_brief{
     padding-left: 15px;
 }
@@ -22,8 +23,9 @@
 
 .flex_wrapper{
     height: 70%;
-    display: flex;
+    width: 70%;
     gap: 5px;
+    display: flex;
     justify-content: space-around;
     align-items: center;
 }

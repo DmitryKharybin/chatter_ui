@@ -1,12 +1,12 @@
-body{
+body {
     box-sizing: border-box;
     margin: 0;
     font-family: 'Ubuntu', sans-serif;
-    background-color: rgb(17, 17, 85);
+    background-color: #0E2A47;
     color: white;
 }
 
-.container{
+.container {
     display: flex;
     padding: 1rem;
     justify-content: center;
@@ -14,13 +14,45 @@ body{
     height: 80vh;
 }
 
-#footer{
+#footer {
     position: absolute;
     bottom: 0;
     margin: 0;
     padding: 1rem;
 }
 
-#footer p{
+button{
+    border: none;
+    border-color: transparent;
+    background-color: #edf6f9;
+    border-radius: 5px;
+}
+
+button:hover{
+    background-color: #0096c7;
+}
+
+/* <--> */
+.horizontal-flex{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 10px;
+    
+}
+
+
+/* ^
+   |
+   v
+ */
+.vertical-flex{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+}
+
+#footer p {
     margin: 0;
 }

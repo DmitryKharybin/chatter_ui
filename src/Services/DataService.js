@@ -6,16 +6,34 @@ const DATA_ENDPOINT = import.meta.env.VITE_BACKEND_DATA_ENDPOINT;
 
 export default class DataService {
 
+    //key = localStorage.getItem('Key');
+
+
+
     userEndPoint = `${API}/${DATA_ENDPOINT}/`
 
 
     //Send token to server , get user data in return 
-    getUserData(token) {
+    getFriendRequests(key) {
 
-        const header = `Authorization: ${token}`;
 
-        return axios.get(this.userEndPoint + 'GetUserData', {headers: {authorization: token}})
+        const config = this.createBearerToken(key);
+        return axios.get(this.userEndPoint + 'GetFriendRequests', config)
 
+    }
+
+    getFriendList(key) {
+        const config = this.createBearerToken(key);
+        return axios.get(this.userEndPoint + 'GetFriends', config)
+    }
+
+
+    createBearerToken(key) {
+        return {
+            headers: {
+                'Authorization': 'Bearer ' + key
+            }
+        };
     }
 
 }
