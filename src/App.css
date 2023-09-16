@@ -6,6 +6,8 @@ body {
     color: white;
 }
 
+
+
 .container {
     display: flex;
     padding: 1rem;
@@ -15,9 +17,12 @@ body {
 }
 
 #footer {
-    position: absolute;
-    bottom: 0;
-    margin: 0;
+    /* position: absolute; */
+    /* bottom: 0;
+    margin: 0; */
+    display: flex;
+    justify-content: end;
+    margin: 10px;
     padding: 1rem;
 }
 
@@ -41,8 +46,21 @@ button:hover{
     
 }
 
+.chat-box{
+    /* padding: 10px; */
+   
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
 
-/* ^
+.chat-container{
+    position: absolute;
+    bottom: 0px;
+    right: 450px;
+}
+
+/* ^ 
    |
    v
  */
@@ -55,4 +73,26 @@ button:hover{
 
 #footer p {
     margin: 0;
+}
+
+.small-round-image{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.scrollable{
+    overflow-y: auto;
+}
+
+.scrollable-x{
+    overflow-x: auto;
+}
+
+.scrollable::-webkit-scrollbar{
+    display: none;
+}
+
+.small-date{
+    font-size: small;
 }

@@ -3,17 +3,15 @@ import useHttpPostMutation from "../../hooks/useHttpPostMutation";
 import * as yup from 'yup';
 import { useEffect } from "react";
 import Form from "../Form/Form";
+import EndpointService from "../../Services/EndpointService";
 
 export default function Register() {
 
-
-    const API = import.meta.env.VITE_BACKEND_CHATTER_API;
-    const USER_ENDPOINT = import.meta.env.VITE_BACKEND_USER_ENDPOINT;
+    const { mutate, isSuccess, isError, data, isLoading } = useHttpPostMutation()
     const navigate = useNavigate();
 
-    const { mutate, isSuccess, isError, data, isLoading } = useHttpPostMutation()
-
-    const userEndPoint = `${API}/${USER_ENDPOINT}/RegisterUser`
+    const endpointService = new EndpointService();
+    const registerEndpoint = endpointService.endpointStringFactory('user', 'RegisterUser');
 
     const schema = yup.object({
         name: yup.string().required('Name is required').min(4, 'Name must be at least 4 characters long')
@@ -21,7 +19,7 @@ export default function Register() {
         gender: yup.number().required('Gender is required').min(0).max(1),
         userName: yup.string().required('Username is required').min(4, 'Username must be at least 4 characters long')
             .max(20, "Username can't exceed 20 characters"),
-        password: yup.string().required('Password is required').min(8,'Password must be at least 8 characters long').max(30,"Password can't exceed 30 characters")
+        password: yup.string().required('Password is required').min(8, 'Password must be at least 8 characters long').max(30, "Password can't exceed 30 characters")
             .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W]).*$/, 'Password must contain at least 1 : Capital letter, Regular letter, number, special symbol'),
         email: yup.string().required('Email is required').email('Please enter a valid email')
     })
@@ -37,7 +35,7 @@ export default function Register() {
             name: 'gender',
             type: 'select',
             id: 'gender',
-            options: [{name:'male', value: 0}, {name: 'female', value: 1}]
+            options: [{ name: 'male', value: 0 }, { name: 'female', value: 1 }]
         },
         {
             name: 'userName',
@@ -61,7 +59,7 @@ export default function Register() {
 
 
     function onSubmitHandler(data) {
-        mutate({ endPoint: userEndPoint, body: data })
+        mutate({ endPoint: registerEndpoint, body: data })
     }
 
 

@@ -21,6 +21,24 @@
     z-index: 2;
 }
 
+#messenger-search-bar{
+    background-color:  rgba(70, 131, 180, 0);
+    width: 250px;
+    height: 2rem;
+    color: white;
+    border: none;
+}
+
+
+#messenger-search-bar::placeholder{
+    color: white;
+}
+
+#messenger-search-bar:focus{
+    outline:none;
+    box-shadow: 0 0 10px #719ECE;
+}
+
 
 
 

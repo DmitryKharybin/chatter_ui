@@ -1,28 +1,26 @@
-import { useState, useEffect, useContext, useReducer } from "react";
+import { useEffect, useContext, useReducer } from "react";
 import useHttpPostMutation from "../../hooks/useHttpPostMutation";
 import { useNavigate } from "react-router-dom";
 import Form from '../Form/Form'
 import * as yup from 'yup';
 import { Link } from "react-router-dom";
 import { UserContext } from "../../App";
+import EndpointService from "../../Services/EndpointService";
 
 
 
 export default function LoginPage() {
 
-  const API = import.meta.env.VITE_BACKEND_CHATTER_API;
-  const USER_ENDPOINT = import.meta.env.VITE_BACKEND_USER_ENDPOINT;
+  const { mutate, isSuccess, isError, data, isLoading } = useHttpPostMutation()
   const navigate = useNavigate();
-  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+  const endpointService = new EndpointService();
+  const loginEndpoint = endpointService.endpointStringFactory('user', 'Login');
 
-  // const loginStatus = useContext(UserContext)
 
   const { login } = useContext(UserContext);
   const [loginState, setLoginState] = login;
 
-  const { mutate, isSuccess, isError, data, isLoading } = useHttpPostMutation()
 
-  const userEndPoint = `${API}/${USER_ENDPOINT}/Login`
 
   const schema = yup.object({
     userName: yup.string().required('Username is required'),
@@ -46,7 +44,7 @@ export default function LoginPage() {
 
 
   function onSubmitHandler(data) {
-    mutate({ endPoint: userEndPoint, body: data })
+    mutate({ endPoint: loginEndpoint, body: data })
   }
 
 

@@ -6,46 +6,31 @@ import UserPage from "./Components/UserPage/UserPage";
 import LoginPage from "./Components/Login/LoginPage";
 import HomePage from "./Components/HomePage";
 import Register from "./Components/Register/Register";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createContext } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useChatterHub } from "./hooks/useChatterHub";
 import DataService from "./Services/DataService";
-// import useHttpGet from "../src/hooks/useHttpGet";
-import useGetUserData from '../src/hooks/useGetUserData'
+import MessengerDock from "./Components/Messenger/MessengerDock";
+import MessagePanel from "./Components/Messenger/MessagePanel";
 export const UserContext = createContext();
 
 
 function App() {
 
 
-  const [loginState, setLoginState] = useState();
+  const [loginState, setLoginState] = useState(false);
   const [userData, setUserData] = useState({});
   const queryClient = useQueryClient();
-  const chatterHub = useChatterHub(onNewMessage, onNewNotification, onFailConnection, userData);
+  const chatterHub = useChatterHub(onNewMessage, onNewNotification, onFailConnection, userData, loginState);
   const [hasNotification, setHasNotification] = useState(false);
+  //Pass in user name, id, image for chat 
+  const [usersInChatList, setUsersInChatList] = useState([]);
+  const [usersWithPendingMessage, setUsersWithPendingMessage] = useState([]);
 
 
   const dataService = new DataService();
-  //const key = localStorage.getItem('Key');
 
-
-  // const API = import.meta.env.VITE_BACKEND_CHATTER_API;
-  // const DATA_ENDPOINT = import.meta.env.VITE_BACKEND_DATA_ENDPOINT;
-
-
-
-  // const endpoint = `${API}/${DATA_ENDPOINT}/GetMyUserData`;
-
-  //const { data } = useHttpGet(endpoint, { Authorization: key }, 'MyUserData')
-
-  //const {data} = useGetUserData();
-
-  // useEffect(() => {
-  //   if (data != undefined) {
-  //     setUserData(data.data);
-  //   }
-  // }, [data]);
 
   function logout() {
     localStorage.removeItem('Key');
@@ -53,6 +38,7 @@ function App() {
     queryClient.removeQueries({ queryKey: 'MyUserData', exact: true });
     chatterHub.logUserOut(userData.id);
   }
+
 
 
   async function onNewNotification(message) {
@@ -83,12 +69,12 @@ function App() {
   async function updatefriendRequests(key) {
     dataService.getFriendRequests(key)
       .then(req => {
-        const newMessageData = req.data;
+        const newFriendsData = req.data;
         queryClient.setQueriesData(['MyUserData'], (data) => {
           return {
             data: {
               ...data.data,
-              friendRequests: newMessageData
+              friendRequests: newFriendsData
             }
           };
         });
@@ -109,30 +95,68 @@ function App() {
       });
   }
 
-  function onNewMessage() {
-    //TODO : complete new message logic
+  function onNewMessage(message) {
+
+    setHasNotification(true);
+    //If user already exist in array , override latest message
+    setUsersWithPendingMessage(users => {
+      if (!usersWithPendingMessage.some(u => u.id == message.senderId)) {
+        return [...users, { id: message.senderId, Image: message.sender.image, name: message.sender.name, message: message.body }]
+      }
+    })
+
+
+    queryClient.setQueryData(['chatParticipants'], (data) => {
+      if (data.data.some(u => u.id == message.senderId)) {
+        return;
+      }
+      return {
+        data:
+          [...data.data, message.sender]
+      }
+    });
+    queryClient.setQueryData(['MyUserData'], (data) => {
+      return {
+        data: {
+          ...data?.data,
+          receivedMessages: [...data?.data?.receivedMessages, message]
+        }
+      };
+    });
+
+
+    queryClient.setQueryData(['chat', message.senderId], (data) => {
+      return {
+        data:
+          [...data?.data, message]
+      }
+    });
+
   }
+
 
   function onFailConnection() {
     alert('Disconnected from server, Please refresh page');
   }
 
 
-
-
-
   useEffect(() => {
     if (localStorage.getItem('Key')) {
       setLoginState(true);
-      // console.log(userData);
-      // logUser(userData);
+
     } else {
       setLoginState(false);
     }
   }, [])
 
-//Attempt to login user
+
+
+
+  //Attempt to login user
   function logUser(userData) {
+
+
+    chatterHub.login();
     const interval = setInterval(() => {
       if (!chatterHub.isLoggedIn && userData.id != undefined) {
         chatterHub.login();
@@ -143,15 +167,48 @@ function App() {
 
 
   useEffect(() => {
-    logUser(userData);
+    if (loginState == true) {
+      logUser(userData);
+    }
+
+
+    let tempUsersArr = []
+
+    userData?.receivedMessages?.forEach(message => {
+
+      if (!message?.isRead) {
+
+        if (!tempUsersArr.some(u => u?.id == message?.senderId)) {
+          tempUsersArr.push({ id: message?.senderId, image: message?.sender?.image, name: message?.sender?.name, message: message?.body });
+        }
+      }
+    });
+
+    setUsersWithPendingMessage(tempUsersArr);
+
+
+    if (userData.receivedMessages?.length > 0) {
+
+      if (userData.receivedMessages.some(message => message.isRead == false)) {
+        setHasNotification(true);
+      }
+    }
+
+
   }, [userData])
+
+
 
 
   return (
     <UserContext.Provider value={{
       login: [loginState, setLoginState], user: [userData, setUserData],
-      chatterHub: chatterHub, notification: [hasNotification, setHasNotification]
+      chatterHub: chatterHub, notification: [hasNotification, setHasNotification],
+      userCollection: [usersInChatList, setUsersInChatList],
+      messagesFromUsers: [usersWithPendingMessage, setUsersWithPendingMessage]
     }}>
+
+      {/* <UserContext.Provider value = {contextValue}> */}
 
       <div>
         <NavBar logout={logout}>
@@ -168,11 +225,15 @@ function App() {
           <Route path='user/:id' element={<UserPage />} />
           <Route path='*' element={loginState ? <HomePage /> : <LoginPage />} />
         </Routes>
+
+        {loginState ? <div className="chat-box">
+          <MessengerDock></MessengerDock>
+        </div> : null}
+
+        {loginState ? <div className="chat-container"><MessagePanel /></div> : null}
+
       </div>
 
-      <footer id="footer">
-        <p>©Copyright 2023 Chatter. All rights reversed.</p>
-      </footer>
     </UserContext.Provider>
   )
 }

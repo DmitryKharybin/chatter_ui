@@ -1,0 +1,114 @@
+:root {
+    --width: 260px;
+    --hight: 450px;
+    --color: rgba(70, 131, 180, 0.692);
+    --border: white 2px solid;
+}
+
+
+.chats-area {
+    width: var(--width);
+    height: var(--hight);
+}
+
+.dock-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+#messenger-container{
+    width: var(--width);
+}
+
+#messenger-dock {
+    width: var(--width);
+    border-radius: 5px;
+    background-color: var(--color);
+    border: var(--border);
+}
+
+#messenger-dock svg {
+    width: 40px;
+    height: 40px;
+}
+
+#message-dock-top {
+    background-color: var(--color);
+    width: var(--width);
+}
+
+#chat-box-container{
+    width: calc(var(--width) + 50px);
+    height: calc(var(--hight) - 100px);
+    background-color: var(--color);
+}
+
+#chat-box-dock{
+    width: calc(var(--width) + 50px);
+    background-color: var(--color);
+}
+
+#chat-box-dock button{
+    margin-right: 10px;
+
+}
+
+.imbedded-btn{
+    width: 40px;
+    height: inherit;
+}
+
+
+.border-wrapper{
+    border: var(--border);
+    border-radius: 5px;
+}
+
+.text-area{
+    width: var(--width); 
+    resize: none;
+}
+
+.chat-bubble{
+    max-width: 300px;
+    min-width: 50px;
+    max-height: 150px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.my-message{
+    display: flex;
+    border: 1px rgb(55, 55, 185) solid ;
+    justify-content: end;
+    margin-right: 10px;   
+    background-color: rgb(55, 55, 185); 
+    border-radius: 20% 20% 5% 20%;
+    
+} 
+
+.other-user-message{
+    display: flex;
+    flex-direction: column;
+    border: 1px rgb(43, 146, 43) solid;
+    margin-left: 10px;
+    background-color: rgb(43, 146, 43);
+    border-radius:  20% 20% 20% 5%;
+}
+
+.chat-spacing{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+
+#message-date{
+    align-self: flex-end;
+    font-size: 12px;
+}
+
+
+
+

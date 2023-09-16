@@ -10,7 +10,6 @@ export default function useHttpPostMutation() {
 
     const mutation = useMutation(({ endPoint, headers, body = '' }) => {
   
-
         return axios.post(endPoint, body, {headers: headers})
     })
 

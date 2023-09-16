@@ -7,29 +7,33 @@ import { useContext } from "react";
 import { UserContext } from "../../App";
 import useGetUserData from '../../hooks/useGetUserData';
 import { useEffect } from "react";
+import HorizontalContainer from "../HorizontalContainer";
+import VerticalContainer from "../VerticalContainer";
+import EndpointService from "../../Services/EndpointService";
 
 
 export default function UserPage() {
 
     const params = useParams();
 
-    const { user } = useContext(UserContext);
+    const { user, userCollection } = useContext(UserContext);
     const [userData, setUserData] = user;
-
+    const [usersInChatList, setUsersInChatList] = userCollection;
     const getUserQuery = useGetUserData();
+
+    const endpointService = new EndpointService();
 
 
     const { chatterHub } = useContext(UserContext);
 
     const { requestChanged } = chatterHub;
 
-    const API = import.meta.env.VITE_BACKEND_CHATTER_API;
-    const DATA_ENDPOINT = import.meta.env.VITE_BACKEND_DATA_ENDPOINT;
+
+    const endpoint = endpointService.endpointStringFactory('data', 'GetUserData');
+    const friendRequestEndpoint = endpointService.endpointStringFactory('data', 'SendFriendRequest');
 
 
-    const endpoint = `${API}/${DATA_ENDPOINT}/GetUserData`;
-
-    const friendRequestEndpoint = `${API}/${DATA_ENDPOINT}/SendFriendRequest`;
+    
 
     const key = localStorage.getItem('Key');
 
@@ -43,6 +47,11 @@ export default function UserPage() {
         }
     }, [getUserQuery.data])
 
+    function setUserChat(userId, userName, userImage) {
+        if (!usersInChatList.some(user => user.id == userId)) {
+            setUsersInChatList(users => [...users, { id: userId, name: userName, image: userImage }]);
+        }
+    }
 
 
     if (isLoading) {
@@ -74,7 +83,7 @@ export default function UserPage() {
         const user = data.data
 
         return (
-            <div className="vartical_flex_container">
+            <VerticalContainer>
 
                 <UpperCard user={{ image: user?.image, name: user?.name, friends: user?.friends }} >
                     {user.image ? <img src={'data:image/png;base64, ' + user.image} /> : <img src="/Images/DefaultAvatar.png" />}
@@ -84,13 +93,13 @@ export default function UserPage() {
                         {user.friends ? <p>{user.friends.length} friends</p> : <p>No Friends... yet</p>}
                     </div>
 
-                    <div className='flex_wrapper'>
+                    <HorizontalContainer>
                         <button onClick={() => sendFriendRequest()}>Friends request</button>
-                        <button>Message</button>
-                    </div>
+                        <button onClick={() => setUserChat(user.id, user.name, user.image)}>Message</button>
+                    </HorizontalContainer>
                 </UpperCard >
                 <Feed posts={user.posts} />
-            </div>
+            </VerticalContainer>
         )
     }
 

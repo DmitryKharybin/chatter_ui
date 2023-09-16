@@ -13,31 +13,38 @@ import DropDownItem from "../DropDownMenu/DropDownItem";
 import FriendRequest from "../DropDownMenu/FriendRequest";
 import "../../App.css"
 import useHttpPostMutation from "../../hooks/useHttpPostMutation";
-import DataService from "../../Services/DataService";
-import ChatterSearchBar from "../SearchBar/ChatterSearchBar";
+import VerticalContainer from "../VerticalContainer";
+import EndpointService from "../../Services/EndpointService";
+import { useQueryClient } from "@tanstack/react-query";
+import HorizontalContainer from "../HorizontalContainer";
+
 
 
 
 export default function NavBar({ logout }) {
 
     //Context from App component
-    const { login, user, notification } = useContext(UserContext);
+    const { login, user, notification, messagesFromUsers, userCollection } = useContext(UserContext);
     const [loginState, setLoginState] = login;
     const [userData, setUserData] = user;
     const [hasNotification, setHasNotification] = notification;
+    const [usersWithPandingMessages, setUsersWithPandingMessages] = messagesFromUsers
+    const [usersInChatList, setUserInChatList] = userCollection;
+    const endpointService = new EndpointService();
+    const queryClient = useQueryClient();
+
 
     const { mutate } = useHttpPostMutation();
 
 
-    //Endpoint of the accept/remove friend request
-    const API = import.meta.env.VITE_BACKEND_CHATTER_API;
-    const USERDATA_ENDPOINT = import.meta.env.VITE_BACKEND_DATA_ENDPOINT;
 
-    const acceptRequestEndPoint = `${API}/${USERDATA_ENDPOINT}/AcceptFriendRequest`
-    const removeRequestEndPoint = `${API}/${USERDATA_ENDPOINT}/DeleteFriendRequest`
-    const dataService = new DataService();
 
-   
+    //Endpoint for remove/accept friend requests
+    const acceptRequestEndPoint = endpointService.endpointStringFactory('data', 'AcceptFriendRequest');
+    const removeRequestEndPoint = endpointService.endpointStringFactory('data', 'DeleteFriendRequest');
+
+
+
     function acceptFriendRequest(request) {
         const key = localStorage.getItem('Key');
         mutate({ endPoint: acceptRequestEndPoint, headers: { 'Authorization': 'Bearer ' + key }, body: request });
@@ -50,9 +57,23 @@ export default function NavBar({ logout }) {
     }
 
     function notificationBarOpened() {
-       
+
         setHasNotification(false);
     }
+
+    function openChat(participant){
+         if (!usersInChatList.some(user => user.id === participant.id)) {
+            setUserInChatList(users => {
+                return [...users, participant]
+            })
+        }
+
+        setUsersWithPandingMessages(users => users.filter(user =>{
+            return user.id != participant.id;
+        }))
+    }
+
+   
 
     if (loginState) {
 
@@ -65,26 +86,35 @@ export default function NavBar({ logout }) {
                     <Link to={'/'} className="navbar_logo">Chatter</Link>
 
                     <SearchBar></SearchBar>
-                   
+
                 </div>
 
                 <ul>
 
                     <NavItem destination={'/profile'} icon={userData === null || userData.image == undefined ? <img src="/Images/DefaultAvatar.png" /> : <img src={'data:image/png;base64, ' + userData.image} />} />
                     {hasNotification ? <div className="notification"></div> : null}
-                    <NavItem  specialFunc={notificationBarOpened} icon={<BellLogo />}>
+                    <NavItem specialFunc={notificationBarOpened} icon={<BellLogo />}>
 
                         <DropDownMenu>
-                            <div className="vertical-flex">
+                            <VerticalContainer>
 
                                 <DropDownItem>
-                                    {userData == null || userData.friendRequests ? userData.friendRequests.map(request => {
-                                        return <div key={request.id}>
-                                            <FriendRequest onAccept={acceptFriendRequest} onDelete={removeFriendRequest} request={request}></FriendRequest>
+                                    {usersWithPandingMessages?.map(user => {
+                                        return <div key={user.id} onClick={() => openChat(user)}>
+                                            <HorizontalContainer>
+                                            <h3>Message From:</h3>
+                                            <i>{user.name}</i>
+                                            </HorizontalContainer>
+                                            
                                         </div>
-                                    }) : null}
+                                    })}
+                                    {userData?.friendRequests?.map(request => {
+                                        return <div key={request.id}>
+                                            <FriendRequest onAccept={acceptFriendRequest} onDelete={removeFriendRequest} request={request} ></FriendRequest>
+                                        </div>
+                                    })}
                                 </DropDownItem>
-                            </div>
+                            </VerticalContainer>
 
                         </DropDownMenu>
 

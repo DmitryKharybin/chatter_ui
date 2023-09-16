@@ -12,7 +12,6 @@
 }
 
 
-
 .user_brief{
     padding-left: 15px;
 }
@@ -30,7 +29,7 @@
     align-items: center;
 }
 
-.vartical_flex_container{
+.vertical_flex_container{
     display: flex;
     flex-direction: column;
     gap: 2rem;

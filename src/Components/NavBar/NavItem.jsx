@@ -30,7 +30,7 @@ export default function NavItem(props) {
                 : <li onClick={() => itemClicked()} ><NavLink to={props.destination} className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>{props.icon}</NavLink></li>}
 
             <CSSTransition
-             in={outSideDetect == false && props.children}
+             in={outSideDetect == false && typeof props.children !== "undefined"}
              nodeRef={Navref}
              timeout={300}
              classNames="drop-effect"
