@@ -61,19 +61,19 @@ export default function NavBar({ logout }) {
         setHasNotification(false);
     }
 
-    function openChat(participant){
-         if (!usersInChatList.some(user => user.id === participant.id)) {
+    function openChat(participant) {
+        if (!usersInChatList.some(user => user.id === participant.id)) {
             setUserInChatList(users => {
                 return [...users, participant]
             })
         }
 
-        setUsersWithPandingMessages(users => users.filter(user =>{
+        setUsersWithPandingMessages(users => users.filter(user => {
             return user.id != participant.id;
         }))
     }
 
-   
+
 
     if (loginState) {
 
@@ -102,10 +102,10 @@ export default function NavBar({ logout }) {
                                     {usersWithPandingMessages?.map(user => {
                                         return <div key={user.id} onClick={() => openChat(user)}>
                                             <HorizontalContainer>
-                                            <h3>Message From:</h3>
-                                            <i>{user.name}</i>
+                                                <h3>Message From:</h3>
+                                                <i>{user.name}</i>
                                             </HorizontalContainer>
-                                            
+
                                         </div>
                                     })}
                                     {userData?.friendRequests?.map(request => {

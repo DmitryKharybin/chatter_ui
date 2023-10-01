@@ -6,13 +6,14 @@ import UserPage from "./Components/UserPage/UserPage";
 import LoginPage from "./Components/Login/LoginPage";
 import HomePage from "./Components/HomePage";
 import Register from "./Components/Register/Register";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { createContext } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useChatterHub } from "./hooks/useChatterHub";
 import DataService from "./Services/DataService";
 import MessengerDock from "./Components/Messenger/MessengerDock";
 import MessagePanel from "./Components/Messenger/MessagePanel";
+import EditUser from "./Components/UserPage/EditUser";
 export const UserContext = createContext();
 
 
@@ -208,7 +209,6 @@ function App() {
       messagesFromUsers: [usersWithPendingMessage, setUsersWithPendingMessage]
     }}>
 
-      {/* <UserContext.Provider value = {contextValue}> */}
 
       <div>
         <NavBar logout={logout}>
@@ -223,6 +223,7 @@ function App() {
           <Route path='login' element={<LoginPage />} />
           <Route path='register' element={<Register />} />
           <Route path='user/:id' element={<UserPage />} />
+          <Route path='editUser' element={<EditUser />} />
           <Route path='*' element={loginState ? <HomePage /> : <LoginPage />} />
         </Routes>
 
@@ -231,6 +232,7 @@ function App() {
         </div> : null}
 
         {loginState ? <div className="chat-container"><MessagePanel /></div> : null}
+
 
       </div>
 

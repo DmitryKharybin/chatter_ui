@@ -20,13 +20,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 export default function Form({ schema, submitHandler, inputs }) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, reset, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
 
 
 
     const onSubmit = (data) => {
+        reset();
         submitHandler(data)
     }
 
@@ -46,8 +47,8 @@ export default function Form({ schema, submitHandler, inputs }) {
                         inputName={input.name}
                         inputPlaceHolder={input.placeHolder}
                         inputType={input.type}
-                        inputId={input.id} 
-                        options={input.options}/>
+                        inputId={input.id}
+                        options={input.options} />
                     <p>{errors[input.name]?.message}</p>
                 </div>
             })}

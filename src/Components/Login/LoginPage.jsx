@@ -1,8 +1,8 @@
 import { useEffect, useContext, useReducer } from "react";
 import useHttpPostMutation from "../../hooks/useHttpPostMutation";
 import { useNavigate } from "react-router-dom";
-import Form from '../Form/Form'
-import * as yup from 'yup';
+import Form from "../Form/Form";
+import * as yup from "yup";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../App";
 import EndpointService from "../../Services/EndpointService";

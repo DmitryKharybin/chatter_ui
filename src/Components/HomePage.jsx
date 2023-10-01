@@ -13,7 +13,6 @@ export default function () {
 
     const key = localStorage.getItem('Key');
 
-    //const { isLoading, data, isError } = useHttpGet(endpoint, { Authorization: key }, 'MyUserData')
 
     const { isLoading, data, isError, error } = useGetUserData();
 

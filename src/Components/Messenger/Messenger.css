@@ -18,7 +18,7 @@
     margin-left: 10px;
 }
 
-#messenger-container{
+#messenger-container {
     width: var(--width);
 }
 
@@ -29,9 +29,23 @@
     border: var(--border);
 }
 
+#toggle-btn {
+    margin-right: 5px;
+}
+
+#toggle-btn svg {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+
 #messenger-dock svg {
     width: 40px;
     height: 40px;
+}
+
+#messenger-dock button {
+    background-color: transparent;
 }
 
 #message-dock-top {
@@ -39,39 +53,45 @@
     width: var(--width);
 }
 
-#chat-box-container{
+#chat-box-container {
     width: calc(var(--width) + 50px);
     height: calc(var(--hight) - 100px);
     background-color: var(--color);
 }
 
-#chat-box-dock{
+
+#chat-box-dock {
     width: calc(var(--width) + 50px);
     background-color: var(--color);
 }
 
-#chat-box-dock button{
+#chat-box-dock button {
     margin-right: 10px;
+    background-color: transparent;
 
 }
 
-.imbedded-btn{
-    width: 40px;
-    height: inherit;
+#chat-box-dock svg {
+    width: 35px;
+    height: 35px;
+}
+
+.imbedded-btn {
+    width: fit-content;
 }
 
 
-.border-wrapper{
+.border-wrapper {
     border: var(--border);
     border-radius: 5px;
 }
 
-.text-area{
-    width: var(--width); 
+.text-area {
+    width: var(--width);
     resize: none;
 }
 
-.chat-bubble{
+.chat-bubble {
     max-width: 300px;
     min-width: 50px;
     max-height: 150px;
@@ -79,36 +99,32 @@
     padding: 5px;
 }
 
-.my-message{
+.my-message {
     display: flex;
-    border: 1px rgb(55, 55, 185) solid ;
+    border: 1px rgb(55, 55, 185) solid;
     justify-content: end;
-    margin-right: 10px;   
-    background-color: rgb(55, 55, 185); 
+    margin-right: 10px;
+    background-color: rgb(55, 55, 185);
     border-radius: 20% 20% 5% 20%;
-    
-} 
 
-.other-user-message{
+}
+
+.other-user-message {
     display: flex;
     flex-direction: column;
     border: 1px rgb(43, 146, 43) solid;
     margin-left: 10px;
     background-color: rgb(43, 146, 43);
-    border-radius:  20% 20% 20% 5%;
+    border-radius: 20% 20% 20% 5%;
 }
 
-.chat-spacing{
+.chat-spacing {
     display: flex;
     flex-direction: column;
     margin: 10px;
 }
 
-#message-date{
+#message-date {
     align-self: flex-end;
     font-size: 12px;
 }
-
-
-
-

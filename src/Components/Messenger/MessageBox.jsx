@@ -13,7 +13,9 @@ import { useQueryClient } from "@tanstack/react-query"
 import EndpointService from "../../Services/EndpointService"
 import { useContext } from "react"
 import { UserContext } from "../../App"
-
+import {ReactComponent as CloseIcon} from '../../icons/close.svg'
+import {ReactComponent as MinimizeIcon} from '../../icons/minimize.svg'
+import {ReactComponent as TerminateIcon} from '../../icons/terminate.svg'
 
 export default function MessageBox({ userId, secondParticipant }) {
 
@@ -86,13 +88,7 @@ export default function MessageBox({ userId, secondParticipant }) {
     //Clear the sender from the pending messages list & set all messages in chat to read = true
     function removeUserFromPendingMessages(userId) {
 
-        // if (!usersWithPandingMessages.some(user => user.id == userId)) {
-        //     return;
-        // }
 
-        // setUsersWithPandingMessages(users => {
-        //     return users?.filter(user => user.id != userId)
-        // });
 
         const userData = queryClient.getQueryData(['MyUserData']);
 
@@ -101,7 +97,6 @@ export default function MessageBox({ userId, secondParticipant }) {
         })
 
 
-        //TODO: check mutation from api
         mutate({ endPoint: markReadEndPoint, headers: { 'Authorization': 'Bearer ' + key }, body: messagesIdArr });
 
         queryClient.setQueryData(['MyUserData'], data => {
@@ -163,11 +158,11 @@ export default function MessageBox({ userId, secondParticipant }) {
                                 </HorizontalContainer>
 
 
-
-
+                               
+                               
                                 <HorizontalContainer>
-                                    <button onClick={() => toggleChat()}>minimize</button>
-                                    <button onClick={() => closeChat(secondParticipant)}>Close</button>
+                                    <button onClick={() => toggleChat()}><MinimizeIcon/></button>
+                                    <button onClick={() => closeChat(secondParticipant)}><TerminateIcon/></button>
                                 </HorizontalContainer>
 
                             </HorizontalContainer>
@@ -197,7 +192,7 @@ export default function MessageBox({ userId, secondParticipant }) {
                         <HorizontalContainer gapDist='2px'>
 
                             <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="What do you have in mind?" className="text-area" />
-                            <button disabled={message.length == 0 ? true : false} className="imbedded-btn" onClick={() => sendMessage(message)}>send</button>
+                            <button  disabled={message.length == 0 ? true : false} className="imbedded-btn" onClick={() => sendMessage(message)}>send</button>
                         </HorizontalContainer>
 
 

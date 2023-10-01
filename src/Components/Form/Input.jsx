@@ -14,22 +14,39 @@
 
 
 
-export default function Input({ inputPlaceHolder, inputType, inputName, inputId, register, options }) {
+export default function Input({ inputPlaceHolder, inputType, inputName, inputId, register, options, inputRef, whenChange }) {
 
 
-    if (inputType === 'select' && options) {
+    if (register) {
+
+        if (inputType === 'select' && options) {
+
+            return (
+                <>
+                    <select {...register(inputName)}
+                        name={inputName}
+                        id={inputId}
+                    >
+                        {options.map((option, index) => {
+                            return <option key={index} value={option.value}>{option.name}</option>
+                        })}
+
+                    </select>
+
+
+                </>
+
+
+            )
+        }
 
         return (
             <>
-                <select {...register(inputName)} 
+                <input {...register(inputName)} type={inputType}
                     name={inputName}
                     id={inputId}
-                >
-                {options.map((option, index) => {
-                    return <option key={index} value={option.value}>{option.name}</option>
-                })}
-                
-                </select>
+                    placeholder={inputPlaceHolder}
+                ></input>
 
 
             </>
@@ -38,13 +55,14 @@ export default function Input({ inputPlaceHolder, inputType, inputName, inputId,
         )
     }
 
-
     return (
         <>
-            <input {...register(inputName)} type={inputType}
+            <input type={inputType}
                 name={inputName}
                 id={inputId}
                 placeholder={inputPlaceHolder}
+                ref={inputRef ? inputRef : null}
+                onChange={whenChange}
             ></input>
 
 
@@ -52,4 +70,5 @@ export default function Input({ inputPlaceHolder, inputType, inputName, inputId,
 
 
     )
+
 }

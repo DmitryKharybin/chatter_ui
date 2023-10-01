@@ -32,7 +32,7 @@ export default function MessengerDock() {
                             </HorizontalContainer>
                         </div>
 
-                        <button onClick={() => setoutSideDetect(currentStatus => !currentStatus)} >{outSideDetect == false ? <CloseIcon /> : <OpenIcon />}</button>
+                        <button id="toggle-btn" onClick={() => setoutSideDetect(currentStatus => !currentStatus)} >{outSideDetect == false ? <CloseIcon /> : <OpenIcon />}</button>
 
                     </HorizontalContainer>
                 </div>

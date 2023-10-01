@@ -6,6 +6,35 @@ body {
     color: white;
 }
 
+.tiny-image{
+    width: 30px;
+    height: 30px;
+}
+
+.small-image{
+    width: 45px;
+    height: 45px;
+}
+
+.small-image, .tiny-image svg{
+   width: inherit; 
+   height: inherit; 
+}
+
+.small-image, .tiny-image svg:hover{
+    filter: brightness(1.15);
+}
+
+
+
+.medium-image{
+    width: 150px;
+    height: 150px;
+}
+
+.round{
+    border-radius: 50%;
+}
 
 
 .container {
